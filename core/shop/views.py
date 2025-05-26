@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Product
+from cart.forms import CartAddProductForm
 import logging
 
 logger = logging.getLogger(__name__)
@@ -38,9 +39,12 @@ def product_detail(request, id, slug):
                                   id=id,
                                   slug=slug,
                                   available=True)
+        cart_product_form = CartAddProductForm()
         logger.debug(f"Found product: {product.name}")
         
-        context = {'product': product}
+        context = {'product': product,
+                   'cart_product_form': cart_product_form
+                   }
         logger.debug("Rendering product detail template")
         return render(request, 'shop/product/detail.html', context)
     except Product.DoesNotExist:
