@@ -399,3 +399,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+.env
+/.env
+/.venv
+.venv
+env
+venv
+core/db.sqlite3
