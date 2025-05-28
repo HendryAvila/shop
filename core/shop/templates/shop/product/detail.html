@@ -4,23 +4,37 @@
 {% block title %}
   {{ product.name }}
 {% endblock %}
+
 {% block content %}
   <div class="product-detail">
-    <img src="{% if product.image %}{{ product.image.url }}{% else %}
-    {% static "img/no_image.png" %}{% endif %}">
+    <a href="{{ product.category.get_absolute_url }}" class="category-link">
+      <i class="fas fa-chevron-left"></i>
+      Back to {{ product.category }}
+    </a>
+    
+    <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}">
+    
     <h1>{{ product.name }}</h1>
-    <h2>
-      <a href="{{ product.category.get_absolute_url }}">
-        {{ product.category }}
-      </a>
-    </h2>
+    
+    <div class="stock-status in-stock">
+      <i class="fas fa-check-circle"></i>
+      In Stock
+    </div>
+    
     <p class="price">${{ product.price }}</p>
+    
     <form action="{% url 'cart:cart_add' product.id %}" method="post">
-      {{ cart_product_form.quantity }}
-      {{ cart_product_form.override }}
-      <input type="submit" value="Add to cart">
+      {{ cart_product_form }}
       {% csrf_token %}
+
+      <button type="submit" class="add-to-cart-btn">
+        <i class="fas fa-shopping-cart"></i>
+        Add to Cart
+      </button>
     </form>
-    {{ product.description|linebreaks }}
+    
+    <div class="description">
+      {{ product.description|linebreaks }}
+    </div>
   </div>
 {% endblock %}
