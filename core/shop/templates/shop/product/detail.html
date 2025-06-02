@@ -7,34 +7,57 @@
 
 {% block content %}
   <div class="product-detail">
-    <a href="{{ product.category.get_absolute_url }}" class="category-link">
-      <i class="fas fa-chevron-left"></i>
-      Back to {{ product.category }}
-    </a>
-    
-    <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}">
-    
-    <h1>{{ product.name }}</h1>
-    
-    <div class="stock-status in-stock">
-      <i class="fas fa-check-circle"></i>
-      In Stock
+    <div class="product-header">
+      <a href="{{ product.category.get_absolute_url }}" class="category-link">
+        <i class="fas fa-chevron-left"></i>
+        Volver a {{ product.category }}
+      </a>
+      <h1>{{ product.name }}</h1>
     </div>
-    
-    <p class="price">${{ product.price }}</p>
-    
-    <form action="{% url 'cart:cart_add' product.id %}" method="post">
-      {{ cart_product_form }}
-      {% csrf_token %}
 
-      <button type="submit" class="add-to-cart-btn">
-        <i class="fas fa-shopping-cart"></i>
-        Add to Cart
-      </button>
-    </form>
-    
-    <div class="description">
-      {{ product.description|linebreaks }}
+    <div class="product-grid-detail">
+      <div class="product-image">
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}">
+      </div>
+
+      <div class="product-info-detail">
+        <div class="stock-status">
+          <i class="fas fa-check-circle"></i>
+          Stock disponible
+        </div>
+
+        <div class="price-section">
+          <p class="price">${{ product.price }}</p>
+
+          <form action="{% url 'cart:cart_add' product.id %}" method="post">
+            <div class="quantity-section">
+              <span class="quantity-label">Cantidad:</span>
+              <div class="quantity-wrapper">
+                <button type="button" class="quantity-btn" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <input type="number" name="quantity" value="1" min="1" max="99">
+                <button type="button" class="quantity-btn" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            {{ cart_product_form.override }}
+            {% csrf_token %}
+            
+            <button type="submit" class="add-to-cart-btn">
+              <i class="fas fa-shopping-cart"></i>
+              Agregar al carrito
+            </button>
+          </form>
+        </div>
+
+        <div class="description">
+          <h2>Descripción del producto</h2>
+          {{ product.description|linebreaks }}
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}

@@ -1,0 +1,56 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+    Finalizar compra
+{% endblock %}
+
+{% block content %}
+<div class="order-container">
+    <h1 class="order-title">Finalizar compra</h1>
+    
+    <div class="order-summary">
+        <h3>Resumen de tu pedido</h3>
+        <ul class="order-items">
+            {% for item in cart %}
+                <li>
+                    <span class="item-details">
+                        <span class="item-quantity">{{ item.quantity }}x</span>
+                        <span class="item-name">{{ item.product.name }}</span>
+                    </span>
+                    <span class="item-price">${{ item.total_price }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="order-total">
+            Total: ${{ cart.get_total_price }}
+        </div>
+    </div>
+
+    <form method="post" class="order-form">
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="field-errors">
+                        {% for error in field.errors %}
+                            <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-check"></i> Confirmar pedido
+            </button>
+        </div>
+        {% csrf_token %}
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/orders.css' %}" rel="stylesheet">
+{% endblock %}
