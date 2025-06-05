@@ -1,8 +1,21 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
-
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print("EL base dir esta aqui", BASE_DIR)
+
+dotenv_path = os.path.join(BASE_DIR.parent, ".env")
+
+load_dotenv(dotenv_path)
+if os.path.exists(dotenv_path):
+    print(f"Archivo .env encontrado en: {dotenv_path}")
+else:
+    print(f"Archivo .env no encontrado en: {dotenv_path}")
+
+
+#BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-0%xp9j74b)!s=2pyk6#4qtz3_1xg$j!7##_moh$1mourpe*v@6'
 
@@ -120,3 +133,11 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+
+#Email server configuration
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+print(EMAIL_HOST)
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS") == "True" 

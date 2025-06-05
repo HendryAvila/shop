@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import OrderItem
 from .forms import OrderCreateForm
 from cart.cart import Cart
+from .tasks import create_order
 import logging
 
 # Configure logger for this module
@@ -31,6 +32,8 @@ def order_create(request):
                     )
                 
                 cart.clear()
+                create_order.delay(order.id)
+                
                 logger.info("Cart cleared after successful order creation")
                 return render(request, 'orders/order/created.html', {'order': order})
             
