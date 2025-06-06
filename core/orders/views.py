@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.url import reverse
 from .models import OrderItem
 from .forms import OrderCreateForm
 from cart.cart import Cart
@@ -33,9 +34,10 @@ def order_create(request):
                 
                 cart.clear()
                 create_order.delay(order.id)
-                
+                logger.info("setting the order in the session")
+                request.session['order_id'] = order.id
                 logger.info("Cart cleared after successful order creation")
-                return render(request, 'orders/order/created.html', {'order': order})
+                return redirect(reverse('payment:process'))
             
             except Exception as e:
                 logger.error(f"Error during order creation: {str(e)}")
