@@ -54,6 +54,7 @@ def stripe_webhook(request):
                 
                 # mark order as paid
                 order.paid = True
+                order.stripe_id = session.payment_intent
                 # store Stripe payment ID (solo si el campo existe)
                 if hasattr(order, 'stripe_id'):
                     order.stripe_id = session.payment_intent
