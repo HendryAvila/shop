@@ -3,6 +3,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from orders.models import Order
+from .tasks import payment_completed
 import logging
 import os
 
@@ -61,6 +62,8 @@ def stripe_webhook(request):
                 order.save()
                 
                 logger.info(f"WEBHOOK: Order {order.id} marked as PAID!")
+                # launch asynchronous task
+                payment_completed.delay(order.id)
                 
             except Order.DoesNotExist:
                 logger.error(f"WEBHOOK: Order not found: {order_id}")
