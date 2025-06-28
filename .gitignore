@@ -406,3 +406,5 @@ FodyWeavers.xsd
 env
 venv
 core/db.sqlite3
+STRIPE_GUIDE.md
+/STRIPE_GUIDE.md
